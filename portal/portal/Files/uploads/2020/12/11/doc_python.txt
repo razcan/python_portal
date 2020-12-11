@@ -1,0 +1,183 @@
+1. install pycharm: pycharm-community-2020.3.exe
+2. pip install pyodbc: conn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER=ROBUN028\\RZC;DATABASE=TINMAR_ERP_NEW_LOCAL;UID=sa;PWD=vasilica#25')
+
+import pyodbc
+
+conn = pyodbc.connect('Driver={SQL Server};'
+                      'Server=ROBUN028\\RZC;'
+                      'Database=TINMAR_ERP_NEW_LOCAL;'
+                      'Trusted_Connection=yes;')
+
+cursor = conn.cursor()
+cursor.execute('SELECT top 10 * FROM Document')
+
+for row in cursor:
+    print(row)
+
+django connect to mssql:
+
+pip install django-pyodbc-azure
+
+DATABASES = {
+    'default': {
+        'ENGINE':'sql_server.pyodbc',
+        'NAME': 'TINMAR_ERP_NEW_LOCAL',
+        'HOST': 'ROBUN028\\RZC',
+        'USER': 'sa',
+        'PASSWORD': 'vasilica#25',
+
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',
+        }
+    }
+}
+
+3. install django : python -m pip install Django
+4. create django project: django-admin startproject portal
+5. start project:  python manage.py runserver or python manage.py runserver 0:8000
+6. create app in portal project: python manage.py startapp invoices(we need to create for each route a dif app)
+
+7. migrare tabele :  python manage.py migrate
+
+8. create portal structure views - routes - base html page
+/home - dashboard
+/myaccount
+/invoices
+/payments
+/onlinepayment
+/complaints
+
+a.edit \portal\invoices\views.py:
+
+from django.urls import path
+from . import views
+urlpatterns = [
+    path('', views.index, name='index'),
+]
+
+b.create urls file:
+\portal\portal\invoices\urls.py
+
+from django.urls import path
+
+from . import views
+
+urlpatterns = [
+    path('', views.index, name='index'),
+]
+
+c. change the main urls file:
+
+from django.contrib import admin
+from django.urls import include, path
+
+urlpatterns = [
+    path('invoices/', include('invoices.urls')),
+    path('admin/', admin.site.urls),
+]
+
+d. invoices view 
+from django.http import HttpResponse
+from django.shortcuts import render
+
+def index(request):
+    return render(request, 'invoices_page.html')
+
+e.
+create super user:
+
+python manage.py createsuperuser
+
+Username (leave blank to use 'razvan.mustata'):
+Email address: razvan.mustata@gmail.com
+Password:
+Password (again):
+Superuser created successfully.
+
+django admin page:
+http://127.0.0.1:8000/admin/
+
+
+9. example of page: https://apaalba.ro/dragi-clienti-anuntam-lansarea-portalul-nostru-de-plati-online-un-website-modern-adaptabil-la-orice-dispozitiv-si-securizat/
+
+10.create github repository:
+echo "# python_portal" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/razcan/python_portal.git
+git push -u origin main
+
+11.html base:
+https://codepen.io/husseinyahfoufi/pen/jPmgyy
+https://codepen.io/djdabe/pen/qXgJNV
+
+12. see/add details from admin page
+create model for complaints:
+
+from datetime import timezone
+from django.db import models
+
+
+class Complaints(models.Model):
+    title = models.CharField(max_length=200)
+    text = models.TextField()
+    priority = models.PositiveIntegerField
+    attachment = models.FileField(upload_to='uploads/%Y/%m/%d/')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+a.python manage.py makemigrations
+b.python manage.py migrate
+c. to see the model in the admin page, you need to import the model in the admin.py file of each app:
+
+from django.contrib import admin
+from .models import Complaints
+from django import forms
+
+
+class ComplaintsAdmin(admin.ModelAdmin):
+    list_display = ('title', 'text', 'created_at')
+
+
+admin.site.register(Complaints, ComplaintsAdmin)
+
+
+13. solve the html pages/buttons
+views.py - payments:
+
+from django.http import HttpResponse
+from django.shortcuts import render
+
+def index(request):
+    return render(request, 'payments_page.html')
+
+def gigi(request):
+    return render(request, 'gigi.html')
+
+def payments(request):
+    return render(request, 'payments_page.html')
+
+
+urls.py:
+
+from django.urls import path
+
+from . import views
+
+urlpatterns = [
+    path('', views.index, name='index'),
+    path('gigi', views.gigi, name='gigi'),
+    path('payments', views.payments, name='payments'),
+]
+
+invoices.html:
+
+<button type="button">
+    <a href="{% url 'gigi' %}">gigi!</a>
+</button>
+
+<button type="button">
+    <a href="{% url 'payments' %}">payments!</a>
+</button>

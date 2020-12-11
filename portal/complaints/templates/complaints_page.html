@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en">
+  <body>
+{% extends "base.html" %}
+
+{% block content %}
+          <form action="" method="post" id="main">
+               <div class="form-group">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type="submit">
+               </div>
+          </form>
+{% endblock %}
+  </body>
+</html>
