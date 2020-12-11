@@ -33,6 +33,9 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'invoices.apps.InvoicesConfig',
+    'dashboard.apps.DashboardConfig',
+    'payments.apps.PaymentsConfig',
+    'complaints.apps.ComplaintsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
