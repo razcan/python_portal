@@ -28,7 +28,7 @@
 
   <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
-    <a class="navbar-brand mr-1" href="index.html">Charisma Portal</a>
+    <a class="navbar-brand mr-1" href="{% url 'dashboard' %}>Charisma Portal</a>
 
     <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
       <i class="fas fa-bars"></i>
@@ -78,24 +78,27 @@
     <!-- Sidebar -->
     <ul class="sidebar navbar-nav">
       <li class="nav-item active">
-        <a class="nav-link" href="index.html">
+        <a class="nav-link" href="{% url 'dashboard' %}">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Dashboard</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/invoices">
+        <a class="nav-link" href="{% url 'invoices' %}">
           <i class="fas fa-fw fa-chart-area"></i>
           <span>Invoices</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/complaints">
+        <a class="nav-link" href="{% url 'complaints' %}">
           <i class="fas fa-fw fa-table"></i>
           <span>Complaints</span></a>
       </li>
     </ul>
 
     <!-- /.content-wrapper -->
+    {% block content %}
+    {% endblock %}
+
 
   </div>
   <!-- /#wrapper -->
@@ -124,10 +127,12 @@
     </div>
   </div>
 
+
+
+
+
   <!-- Bootstrap core JavaScript-->
   <script src= "{% static 'vendor/jquery/jquery.min.js' %}"></script>
-
-
   <script src= "{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
   <!-- Core plugin JavaScript-->
   <script src= "{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
