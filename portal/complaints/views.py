@@ -41,3 +41,9 @@ def update(request, id):
         return redirect("/complaints")
     return render(request, 'edit.html', {'result': result})
 
+
+def delete(request, id):
+    result = Complaints.objects.get(id=id)
+    result.delete()
+    return redirect("/complaints")
+
