@@ -5,9 +5,12 @@ from django.shortcuts import render
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 
+from .models import Complaints
+
 
 def index(request):
-    return render(request, 'complaints_page.html')
+    results = Complaints.objects.all()
+    return render(request, 'complaints_page.html', {'results': results})
 
 
 def complaints(request):
@@ -23,3 +26,18 @@ def complaints(request):
         #return HttpResponseRedirect("/invoices")
     context = {'form': form}
     return render(request, 'complaints_page.html', context)
+
+
+def edit(request, id):
+    result = Complaints.objects.get(id=id)
+    return render(request, 'edit.html', {'result': result})
+
+
+def update(request, id):
+    result = Complaints.objects.get(id=id)
+    form = ComplaintsForm(request.POST, instance=result)
+    if form.is_valid():
+        form.save()
+        return redirect("/complaints")
+    return render(request, 'edit.html', {'result': result})
+
